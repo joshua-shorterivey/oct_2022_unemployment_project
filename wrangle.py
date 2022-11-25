@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.impute import KNNImputer
 
 def acquire_oct():
     ''' 
@@ -393,6 +394,51 @@ def prep_values(df):
 
     return df
 
+def scale_data(df):
+    """ 
+    Purpose:
+        
+    ---
+    Parameters:
+        
+    ---
+    Returns:
+    
+    """
+    scaler = MinMaxScaler()
+    to_scale = ['household_num', 'num_children']
+    scaler.fit(df[to_scale])
+
+    df[to_scale]=scaler.transform(df[to_scale])
+
+    return df
+
+def split_encode_data(df):
+    ''' 
+    Purpose:
+        To split the input dataframe
+    ---
+    Parameters:
+        df: a tidy dataframe
+    ---
+    Output:
+        train: subset of dataframe for model training
+        validate: unseen data for model testing
+        test: unseen data for final model test
+    ---
+    '''
+    #train_test_split
+    train_validate, test = train_test_split(df, test_size=.2, random_state=514, stratify=df['employed'])
+    train, validate = train_test_split(train_validate, test_size=.3, random_state=514, stratify=train_validate['employed'])
+
+    #gets dummies of data
+    train = pd.get_dummies(train)
+    validate = pd.get_dummies(validate)
+    test = pd.get_dummies(test)
+
+    return train, validate, test
+
+
 def wrangle_oct():
     ''' 
     Purpose:
@@ -414,51 +460,61 @@ def wrangle_oct():
 
     df = prep_values(df)
 
-    return df
+    train, validate, test = split_encode_data(df)
 
-def split_scale(df, dummy='n'):
+    train_scaled = scale_data(train)  
+    validate = scale_data(validate)
+    test = scale_data(test)
+
+    return train, train_scaled, validate, test
+
+def split_X_y(train, validate, test):
     ''' 
     Purpose:
-        To split and scale the input dataframe
+    ---
+        To split the subsets further for modeling and testing
     ---
     Parameters:
-        df: a tidy dataframe
-        dummy: ignored
-    ---
-    Output:
         train: unscaled subset of dataframe for exploration and model training
         validate: unscaled and unseen data for model testing
         test: unscaled and unseen data for final model test
-        train_scaled: scaled subset of dataframe for exploration and model training
-        validate_scaled: scaled and unseen data for model testing
-        test_scaled: scaled and unseen data for model testing
+    ---
+    Output:
+        X_train: features to fit model and make predictions
+        y_train: target variable outcome for model evaluation
+        X_validate: features to make predictions
+        y_validate: target variable outcome for model evaluation
+        X_test: features to make predictions
+        y_test: target variable outcome for model evaluation
     ---
     '''
-    #train_test_split
-    train_validate, test = train_test_split(df, test_size=.2, random_state=514, stratify=df['employed'])
-    train, validate = train_test_split(train_validate, test_size=.3, random_state=514, stratify=train_validate['employed'])
+    # split data into Big X, small y sets 
+    X_train = train.drop(columns=['employed'])
+    y_train = train.employed
+
+    X_validate = validate.drop(columns=['employed'])
+    y_validate = validate.employed
+
+    X_test = test.drop(columns=['employed'])
+    y_test = test.employed
+
+    return X_train, y_train, X_validate, y_validate, X_test, y_test
+
+def model_prep():
+    """ 
+    Purpose:
+        
+    ---
+    Parameters:
+        
+    ---
+    Returns:
     
-    #create scaler object
-    scaler = MinMaxScaler()
+    """
 
-    # create copies to hold scaled data
-    train_scaled = train.copy(deep=True)
-    validate_scaled = validate.copy(deep=True)
-    test_scaled =  test.copy(deep=True)
+    train, train_scaled, validate, test = wrangle_oct()
 
-    #create list of numeric columns for scaling
-    num_cols = train.select_dtypes(include='number')
+    (X_train, y_train, X_validate,
+     y_validate, X_test, y_test) = split_X_y(train_scaled, validate, test)
 
-    #fit to data
-    scaler.fit(num_cols)
-
-    # apply
-    train_scaled[num_cols.columns] = scaler.transform(train[num_cols.columns])
-    validate_scaled[num_cols.columns] =  scaler.transform(validate[num_cols.columns])
-    test_scaled[num_cols.columns] = scaler.transform(test[num_cols.columns])
-
-    train_scaled = pd.get_dummies(train_scaled)
-    validate_scaled = pd.get_dummies(validate_scaled)
-    test_scaled = pd.get_dummies(test_scaled)
-
-    return train, validate, test, train_scaled, validate_scaled, test_scaled
+    return X_train, y_train, X_validate, y_validate, X_test, y_test
