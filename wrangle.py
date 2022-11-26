@@ -413,7 +413,7 @@ def scale_data(df):
 
     return df
 
-def split_encode_data(df):
+def split_data(df):
     ''' 
     Purpose:
         To split the input dataframe
@@ -431,15 +431,10 @@ def split_encode_data(df):
     train_validate, test = train_test_split(df, test_size=.2, random_state=514, stratify=df['employed'])
     train, validate = train_test_split(train_validate, test_size=.3, random_state=514, stratify=train_validate['employed'])
 
-    #gets dummies of data
-    train = pd.get_dummies(train)
-    validate = pd.get_dummies(validate)
-    test = pd.get_dummies(test)
-
     return train, validate, test
 
 
-def wrangle_oct():
+def wrangle_oct(explore=False):
     ''' 
     Purpose:
 
@@ -460,7 +455,15 @@ def wrangle_oct():
 
     df = prep_values(df)
 
-    train, validate, test = split_encode_data(df)
+    train, validate, test = split_data(df)
+
+    if explore:
+        return train
+    
+    #gets dummies of data
+    train = pd.get_dummies(train)
+    validate = pd.get_dummies(validate)
+    test = pd.get_dummies(test)
 
     train_scaled = scale_data(train)  
     validate = scale_data(validate)
@@ -517,4 +520,4 @@ def model_prep():
     (X_train, y_train, X_validate,
      y_validate, X_test, y_test) = split_X_y(train_scaled, validate, test)
 
-    return X_train, y_train, X_validate, y_validate, X_test, y_test
+    return train, X_train, y_train, X_validate, y_validate, X_test, y_test
