@@ -35,6 +35,20 @@ def flatten_housing_type(val):
         val = 'other'
     return val
 
+def flatten_family_income(val):
+
+    if 1 <= val <=11:
+        val = '0 TO 49,999'
+    elif val in [12,13]:
+        val = '50,000 to 74,999'
+    elif val == 14:
+        val = '75,000 to 99,999'
+    elif val == 15:
+        val = '100,000 to 149,999'
+    else: 
+        val = '150,000 or More'
+    return val
+
 def flatten_household_type(val):
     ''' 
     Purpose:
@@ -362,6 +376,7 @@ def prep_values(df):
 
     ### flatten values ###
     df.housing_type = df.housing_type.apply(flatten_housing_type)
+    df.family_income = df.family_income.apply(flatten_family_income)
     df.household_type = df.household_type.apply(flatten_household_type)
     df.marital_status = df.marital_status.apply(flatten_marital)
     df['race'] = df['race'].apply(flatten_race)
