@@ -123,6 +123,8 @@ professional_certification |51736 non-null float64 |    DOES � HAVE A CURRENTL
 > Investigate columns that can be dropped or have redundant information  
 > Decide how to deal with outliers  
 > Work through questions involving variables typically present on resume
+> Develop 5 deeper questions to ask of each spotlight category
+> Create additional spotlight category
 * Primary focus for first pass through explore phase
 > Craft general explore section outline
 * Include areas for feature engineering via cluster, rfe, and selectKbest
