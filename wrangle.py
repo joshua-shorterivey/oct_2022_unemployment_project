@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.impute import KNNImputer
+from pandas.api.types import CategoricalDtype
 
 def acquire_oct():
     ''' 
@@ -409,6 +410,15 @@ def prep_values(df):
 
     return df
 
+def prep_column_order(df):
+    income_order = CategoricalDtype(['0 TO 49,999', '50,000 to 74,999', '75,000 to 99,999','100,000 to 149,999','150,000 or More'], ordered=True)
+    education_order = CategoricalDtype(['no_high_school','high_school_ged','associates','bachelor','post_grad'], ordered=True)
+
+    df.family_income = df.family_income.astype(income_order)
+    df.education = df.education.astype(education_order)
+
+    return df
+
 def scale_data(df):
     """ 
     Purpose:
@@ -469,6 +479,8 @@ def wrangle_oct(explore=False):
     df = prep_columns(df)
 
     df = prep_values(df)
+
+    df = prep_column_order(df)
 
     train, validate, test = split_data(df)
 
