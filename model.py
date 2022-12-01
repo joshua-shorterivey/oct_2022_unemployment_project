@@ -11,9 +11,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay
 from sklearn.linear_model import LogisticRegression
-from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn import preprocessing
-import nltk
 
 def create_comp_chart():
     """
@@ -103,9 +101,6 @@ def compute_metrics(model, X_df, y_df):
     """
     # Make Predictions
     y_pred = model.predict(X_df)
-
-    # Estimate Probability 
-    y_pred_proba = model.predict_proba(X_df)
 
     #create confusion matrix
     confusion = confusion_matrix(y_df, y_pred)

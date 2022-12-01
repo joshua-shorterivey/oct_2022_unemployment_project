@@ -459,7 +459,7 @@ def split_data(df):
     return train, validate, test
 
 
-def wrangle_oct(explore=False):
+def wrangle_oct(explore=False, model=False):
     ''' 
     Purpose:
 
@@ -481,6 +481,9 @@ def wrangle_oct(explore=False):
     df = prep_values(df)
 
     df = prep_column_order(df)
+
+    if model:
+        df = df.drop(columns='state')
 
     train, validate, test = split_data(df)
 
