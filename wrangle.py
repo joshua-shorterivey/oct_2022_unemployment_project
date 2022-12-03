@@ -271,7 +271,7 @@ def prep_columns(df):
         'hefaminc': 'family_income',
         'hrhtype': 'household_type',
         'hubus': 'own_bus_or_farm',
-        'gediv': 'country_region',
+        'gediv': 'region',
         'gestfips': 'state',
         'gtmetsta': 'metropolitan',
         'gtcbsasz': 'metro_area_size',
@@ -483,7 +483,8 @@ def wrangle_oct(explore=False, model=False):
     df = prep_column_order(df)
 
     if model:
-        df = df.drop(columns='state')
+        df = df.drop(columns=['state', 'birth_country','mother_birth_country',
+                                'father_birth_country','citizenship', 'immigration_era'])
 
     train, validate, test = split_data(df)
 
