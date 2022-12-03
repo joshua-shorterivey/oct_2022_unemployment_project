@@ -28,10 +28,10 @@ def spotlight_stats(df, feature, title, phase=None):
     prop_df = pd.DataFrame(columns=multi_col)
     prop_df['unemployment_rate'] = round(1 - df.groupby(by=feature).employed.mean().sort_values(ascending=True), 2)
 
-    # show the proportion of the population that each industry is
+    # show the proportion of the population that each categorical option is
     employed_pop_proportion = df[df.employed == 1][feature].value_counts(normalize=True) 
 
-    # show the proportion of the population that each industry is
+    # show the proportion of the population that each categorical option is
     unemployed_pop_proportion = df[df.employed == 0][feature].value_counts(normalize=True) 
     
     #assign proper values to dframe
@@ -44,7 +44,8 @@ def spotlight_stats(df, feature, title, phase=None):
     crosstab = pd.crosstab(df[feature], df["employed"])
 
     chi2, p, dof, expected = chi2_contingency(crosstab)
-
+    
+    #prints crosstab only if phase of project is explore. during model phase just plots graph
     if phase == 'explore':
         print('Crosstab\n')
         print(crosstab.values)
