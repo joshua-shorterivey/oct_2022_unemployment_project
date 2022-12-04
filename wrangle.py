@@ -392,7 +392,7 @@ def prep_values(df):
     ### generate and use value mappings ###
     (region_map, state_map, metropolitan_map, ft_pt_map,
      worker_class_map, industry_map, occupation_map) = generate_mappings()
-    df.country_region = df.country_region.map(region_map)
+    df.region = df.region.map(region_map)
     df.state = df.state.map(state_map)
     df.metropolitan = df.metropolitan.map(metropolitan_map)
     df.ft_or_pt = df.ft_or_pt.map(ft_pt_map)

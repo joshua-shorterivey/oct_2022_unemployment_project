@@ -2,24 +2,26 @@
 * The Current Population Survey (CPS), sponsored jointly by the U.S. Census Bureau and the U.S. Bureau of Labor Statistics (BLS), is the primary source of labor force statistics for the population of the United States. This project uses the October 2022 edition of the Basic Monthly CPS. 
 
 ## Project Objectives  
-> Document code, process data (through entire pipeline), and articulate key findings and takeways in a jupyter notebook final report 
+* Document code, process data (through entire pipeline), and articulate key findings and takeways in a jupyter notebook final report 
 * Create modules that faciliate project repeatability, as well as final report readability
 
-> Construct model to predict `employed` status 
-
-> Refine work into `final_report` in form of jupyter notebook. 
-* Detail work done, underlying rationale for decisions, methodologies chosen, findings, takeaways, and conclusions.
+* Explore features more in depth compared to August iteration of project. 
+    * Look for more crossover beetween features
+* Construct model to predict `employed` status 
+    * Experiment with different model types in order to obtain better predicitive results compared to August
+* Refine work into `final_report` in form of jupyter notebook. 
+    * Detail work done, underlying rationale for decisions, methodologies chosen, findings, takeaways, and conclusions.
 
 ## Project  Goals
-> Construct ML Classification model that accurately predicts `employed` status of survey respondents using clustering techniques to guide feature selection for modeling</br>
+* Construct ML Classification model that accurately predicts `employed` status of survey respondents using clustering techniques to guide feature selection for modeling</br>
 
-> Focus on having a high True Negative Rate 
+* Focus on having a high True Negative Rate 
 
-> Deliver report that the can read through while understanding what steps were taken, why and what the outcome was.
+* Deliver report that the can read through while understanding what steps were taken, why and what the outcome was.
 
-> Provide instructions to replicate project.
+* Provide instructions to replicate project.
 
-> Make recommendations on what works or doesn't work in predicting `employed` status.
+* Make recommendations on what works or doesn't work in predicting `employed` status.
 
 ## Deliverables
 > Github repo with a complete README.md, a final report (.ipynb), other supplemental artifacts and modules created while working on the project (e.g. exploratory/modeling notebook(s))</br>
@@ -61,7 +63,7 @@ professional_certification |51736 non-null float64 |    DOES � HAVE A CURRENTL
  
 * **Answer:** Most indivduals do not have certification, but those that do have a 2% unemployment rate vs 4% for those without.
 
-#### Statistical Hypothesis
+>#### Statistical Hypothesis
 >* ${H_0}$: There is no relationship between having a `professional_certification` and `employment`  
 >* ${H_a}$: There is a relationship between having a `professional_certification` and `employment`    
 >* ${\alpha}$: .05
@@ -72,7 +74,7 @@ professional_certification |51736 non-null float64 |    DOES � HAVE A CURRENTL
 
 * **Answer:** Indivduals identifying as White show the largest population proportion change with a drop of nearly 10% when comparing employed vs unemployed. Those identifying as mixed race other than with white, and Indigenous have the highest unemployed rates at 12% and 7% respectively. 
 
-#### Statistical Hypothesis
+>#### Statistical Hypothesis
 >* ${H_0}$: There is no relationship between `race` and `employment` status   
 >* ${H_a}$: There is a relationship between `race` and `employment` status   
 >* ${\alpha}$: .05  
@@ -106,29 +108,40 @@ professional_certification |51736 non-null float64 |    DOES � HAVE A CURRENTL
 
 # Pipeline Walkthrough
 ## Plan
-> Create and build out project README  
-> Create skeletons of required, as well as supporting, project modules and notebooks
+* Create and build out project README  
+* Create skeletons of required, as well as supporting, project modules and notebooks
 * `env.py`, `wrangle_zillow.py`,  `model.py`,  `Final Report.ipynb`
 * `wrangle.ipynb`,`model.ipynb` ,
-> Decide which colums to import
+    * Decide which colums to import
+    * Made further decisions to eliminate `state` and immigration features after explore phase
 * Examine Data Dictionary from Census
-* Shrink to 50 Columns
+* Shrink to 30 Columns
 * Add to data dictionary during process
 * Delete columns identified as filler in census data dictionary
 * Reduce to items not dependent on other responses
-> Make decision on how to handle various subgroups in the survey reponses 
+    * Make decision on how to handle various subgroups in the survey reponses
+    * Had to flatten certain features to reduce dimensionality for modeling 
 * Decide target disposition, and NLF inclusion
-> Deal with null values
+    * Eliminated all NLF (Not in Labor Force) responses
+    * Utilized only those with clear employed vs unemployed status
+* Deal with null values
+    * Few null values after controlling for employement status
+    * Treated nulls where applicable as other than affirmative responses
 * Think through different imputation strategies
-> Investigate columns that can be dropped or have redundant information  
-> Decide how to deal with outliers  
-> Work through questions involving variables typically present on resume
-> Develop 5 deeper questions to ask of each spotlight category
-> Create additional spotlight category
+    * Used KNN imputer for school, occupation, and industry features
+* Investigate columns that can be dropped or have redundant information  
+* Decide how to deal with outliers 
+    * Kept outliers as is for now. Next iteration will more closely look at flattening them into max+ type columns
+* Work through questions involving variables typically present on resume
+* Develop 5 deeper questions to ask of each spotlight category
+    * Did further examination, but not specifically 5 deeper questions
+    * Will address for next iteration
+* Create additional spotlight category
+    * Spotlighted Immigration categories, but they had minimal effect on employment disposition. Elimated from modeling consideration
 * Primary focus for first pass through explore phase
-> Craft general explore section outline
+* Craft general explore section outline
 * Include areas for feature engineering via cluster, rfe, and selectKbest
-> Work on modeling section
+* Work on modeling section
 * Craft functions for model testing. **NO BIG MASS TESTING FUNCTION**
 * Prep MVP
 * Decide which questions to highlight within Final Report
@@ -136,28 +149,28 @@ professional_certification |51736 non-null float64 |    DOES � HAVE A CURRENTL
 * Craft outline/skeleton for final report
     * Takeaways highlighted    
 * Look into creating feature that blends `household_num` and `family_income` to measure at or above median income for family of that size
+    * Unable to craft for this iteration of Project
 ----
 
 # Wrangle (Acquire and Prep)
-> * Largest and most time intensive part of wrangle was deciding which columns to drop. 
-> - Deviated heavily from initial plan to **only** feature resume-like categories. Sub-optimal decision.
+* Largest and most time intensive part of wrangle was deciding which columns to drop. 
+* Deviated heavily from initial plan to **only** feature resume-like categories. Sub-optimal decision.
 
-### Nulls/Missing Values
-> * Dropped any records that have 'NaN' for target variable, indicates incomplete survey/data.
-> - Same rationale used to justify dropping most observations that had a '-1' value as that indicated the repsondent did not an apporiate repsonse for the area of the survey
-> * For some others such as `usual_hours_worked` information from multiple columns was used to infer proper disposition
-> - Example: Individuals that report variable work hours were assigned population mean hours work for above/or below 35 hours. 
-> * Further work on the project will require more research of how the survey is conducted and the data entered. 
+> ### Nulls/Missing Values
+* Dropped any records that have 'NaN' for target variable, indicates incomplete survey/data. - Same rationale used to justify dropping most observations that had a '-1' value as that indicated the repsondent did not an apporiate repsonse for the area of the survey
+* For some others such as `usual_hours_worked` information from multiple columns was used to infer proper disposition
+* Example: Individuals that report variable work hours were assigned population mean hours work for above/or below 35 hours. 
+* Further work on the project will require more research of how the survey is conducted and the data entered. 
 ---
-### Feature Engineering 
-> * Decided against engineering features due to poor model performance with accurately predicting employment disposition. No point increasing complexity
+>### Feature Engineering 
+* Decided against engineering features due to poor model performance with accurately predicting employment disposition. No point increasing complexity
 ---   
-### Flattening
-> * Had to make decisions in order to remove optionality from certain categorical columns when preparing the data
-> - Example: `race` orginally had over 20 different categories and was ~flattened~ down to 7 
-> * Decisons here driven mostly by desire to create larger cohorts within  features because the unemployment is already such as small amount
+> ### Flattening
+* Had to make decisions in order to remove optionality from certain categorical columns when preparing the data
+- Example: `race` orginally had over 20 different categories and was ~flattened~ down to 7 
+* Decisons here driven mostly by desire to create larger cohorts within  features because the unemployment is already such as small amount
 
-## Exploration Summary
+>## Exploration Summary
 * Overall the conventional wisdom surrounding job prospects held true.
 
 * It benefits an indvidual to acquire advanced dregrees and certifications
@@ -165,22 +178,11 @@ professional_certification |51736 non-null float64 |    DOES � HAVE A CURRENTL
 * With more time I want to dive into cross examinations of factors to see how they interact, but I'm doubtful that would help more than simply satisfying my curiousity. 
 ---
 # Modeling
-* 
+* * Decided to focus on only three types of models for this iteration of project.
+* DTC modeling showed promise, but was prone to overfitting when it came time for use on the validation and test subsets
+* Linear SVC and XGBOOST performed worse during the model phase, and they were not moved forward.
+* Further iterations of project will focus much more on exploration and feature reduction in order to reduce noise and dimensionality. 
 
-## Feature Groups for Modeling
-* Grouped by subject matter into four clumps in leiu of clustering
-
-* Feature Set 1: `industry`, `occupation`, `country_region`, `metro_area_size` , `professional_certification`, `own_bus_or_farm`,`education`  
-    - Chosen to highlight the business oriented concerns around employement
-    ---
-* Feature Set 2: `household_num`, `children_in_household`, `education`, `enrolled_in_school`, `family_income`, `marital_status`
-    - Highlights family and environment characteristics
-    ---
-* Feature Set 3: `age`, `is_male`, `veteran`, `hispanic_non`, `race`, `birth_country`, `mother_birth_country`, `father_birth_country`, `citizenship`, `education` 
-    - Highlights personal characteristics 
-    ---
-* Feature Set 4: `age`, `industry`, `occupation`,`professional_certification`,`education`,`marital_status`,`is_male`,`citizenship`
-    - Highlights areas that may appear on the typical resume or job applicaton
 
 ## Deliver **
 > Create project report in form of jupyter notebook  
@@ -189,8 +191,8 @@ professional_certification |51736 non-null float64 |    DOES � HAVE A CURRENTL
 </br>
 
 ## Project Reproduction Requirements
-> Requires oct22pub.csv featuring Aug 2022 CPS Data from U.S. Census Bureau
-> <a href="https://drive.google.com/file/d/1twg97V0zm_OUcnyWqzYRs38iNuI-5Yc1/view?usp=share_link">Available here</a>
+> Requires oct22pub.csv featuring Octbober 2022 CPS Data from U.S. Census Bureau
+> <a href="https://www2.census.gov/programs-surveys/cps/datasets/2022/basic/oct22pub.csv">Available here</a>
 > Steps:
 * Fully examine this `README.md`
 * Download oct22pub.csv to working directory
