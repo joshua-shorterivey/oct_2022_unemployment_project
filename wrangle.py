@@ -492,11 +492,11 @@ def wrangle_oct(explore=False, model=False):
         return train
     
     #gets dummies of data
-    train = pd.get_dummies(train)
+    train_d = pd.get_dummies(train)
     validate = pd.get_dummies(validate)
     test = pd.get_dummies(test)
 
-    train_scaled = scale_data(train)  
+    train_scaled = scale_data(train_d)  
     validate = scale_data(validate)
     test = scale_data(test)
 
@@ -546,7 +546,7 @@ def model_prep():
     
     """
 
-    train, train_scaled, validate, test = wrangle_oct()
+    train, train_scaled, validate, test = wrangle_oct(model=True)
 
     (X_train, y_train, X_validate,
      y_validate, X_test, y_test) = split_X_y(train_scaled, validate, test)
