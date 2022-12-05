@@ -333,16 +333,16 @@ def generate_mappings():
                     10:	'Educational and health services', 11:'Leisure and hospitality',12:'Other services',									
                     13:'Public administration', 14:'Armed Forces'}
 
-    occupation_map = {1:'Management, business, and financial occupations',
-                    2:	'Professional and related occupations',					
-                    3:	'Service occupations',				
-                    4:	'Sales and related occupations',					
-                    5:	'Office and administrative support occupations',
-                    6:	'Farming, fishing, and forestry occupations',			
-                    7:	'Construction and extraction occupations',				
-                    8:	'Installation, maintenance, and repair occupations',	
-                    9:	'Production occupations',						
-                    10:	'Transportation and material moving occupations',	
+    occupation_map = {1:'Management, business, and financial',
+                    2:	'Professional and related',					
+                    3:	'Service',				
+                    4:	'Sales',					
+                    5:	'Office and administrative support',
+                    6:	'Farming, fishing, and forestry',			
+                    7:	'Construction and extraction',				
+                    8:	'Installation, maintenance, and repair',	
+                    9:	'Production',						
+                    10:	'Transportation and material moving',	
                     11:	'Armed Forces'}
 
     return region_map, state_map, metropolitan_map, ft_pt_map, worker_class_map, industry_map, occupation_map
@@ -389,6 +389,8 @@ def prep_values(df):
     df.immigration_era = df.immigration_era.apply(flatten_immigration_era)
     df.service_era = df.service_era.apply(flatten_service_era)
 
+
+
     ### generate and use value mappings ###
     (region_map, state_map, metropolitan_map, ft_pt_map,
      worker_class_map, industry_map, occupation_map) = generate_mappings()
@@ -399,6 +401,9 @@ def prep_values(df):
     df.worker_class = df.worker_class.map(worker_class_map)
     df.industry = df.industry.map(industry_map)
     df.occupation = df.occupation.map(occupation_map)
+
+    #drops single row where repsondent was in armed forces industry
+    df = df[df.industry != 'Armed Forces']
 
     #fixing binary columns freom -1, 1, 2 --> 0, 1
     binary_cols = ['own_bus_or_farm', 'is_male', 'veteran','hispanic_or_non', 'employed',
