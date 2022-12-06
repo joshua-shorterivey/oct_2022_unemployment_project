@@ -5,7 +5,9 @@ import seaborn as sns
 from scipy.stats import chi2_contingency
 
 
-def spotlight_stats(df, feature, title=None, phase=None, orientation=None):
+# exported to model.py
+
+def spotlight_stats(df, feature, title=None, phase=None):
 
     ''' 
     Purpose:
@@ -27,18 +29,18 @@ def spotlight_stats(df, feature, title=None, phase=None, orientation=None):
     
     # dataframe, 3 columns, 
     prop_df = pd.DataFrame(columns=multi_col)
-    prop_df['unemployment_rate'] = round(1 - df.groupby(by=feature).employed.mean().sort_values(ascending=True), 2)
+    prop_df['unemployment_rate'] = round(1 - df.groupby(by=feature).employed.mean().sort_values(ascending=True), 4)
 
     # i want to show the proportion of the population that each categorical option is
-    employed_pop_proportion = df[df.employed == 1][feature].value_counts(normalize=True) 
+    employed_pop_proportion = df[df.employed == 1][feature].value_counts(normalize=True).sort_index() 
 
     # i want to show the proportion of the population that each categorical option is
-    unemployed_pop_proportion = df[df.employed == 0][feature].value_counts(normalize=True) 
+    unemployed_pop_proportion = df[df.employed == 0][feature].value_counts(normalize=True).sort_index()
     
     #assign proper values to dframe
     prop_df[('population_proportions', 'employed')] = employed_pop_proportion
     prop_df[('population_proportions', 'unemployed')] = unemployed_pop_proportion
-    prop_df[('population_proportions', 'change')] = employed_pop_proportion - unemployed_pop_proportion
+    prop_df[('population_proportions', 'change')] = unemployed_pop_proportion - employed_pop_proportion
 
     #chi2 test
     alpha = .05
@@ -63,13 +65,19 @@ def spotlight_stats(df, feature, title=None, phase=None, orientation=None):
     else: 
         print('Fail to reject null hypothesis')
 
-    #plots the distributions of the feature in separate columns for employed vs unemployed
-    plt.figure(figsize=(20,6))
-    if orientation =='h':
-        g = sns.catplot(data=df, y=feature, col='employed', kind='count', sharex=False)
-    else:
-        g = sns.catplot(data=df, x=feature, col='employed', kind='count', sharey=False)
-    plt.suptitle(f'Spotlight: {title}', y=1.02)
+    prop_df['unemployment_rate'].plot(kind='barh', title='Unemployment Rate')
+    #pie chart creation
+    fig, axs = plt.subplots(1,2, figsize=(12,8))
+    labels1 = employed_pop_proportion.index
+    labels2 = unemployed_pop_proportion.index
+    colors = dict(zip(labels1, plt.cm.tab20.colors[:len(labels1)]))
+
+    axs[0].pie(employed_pop_proportion, autopct='%1.1f%%', labels=labels1, colors=[colors[key] for key in labels1])
+    axs[1].pie(unemployed_pop_proportion, autopct='%1.1f%%', labels=labels2, colors=[colors[key] for key in labels1])
+    plt.tight_layout()
+    axs[0].set_title('Employed Proportions')
+    axs[1].set_title('Unemployed Proportions')
+    plt.suptitle(f'Spotlight: {title}', y=.9)
     plt.show()
 
     return round(prop_df, 3)
