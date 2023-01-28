@@ -1,4 +1,4 @@
-# unemployment_project
+# October 2022 Unemployment Project
 * The Current Population Survey (CPS), sponsored jointly by the U.S. Census Bureau and the U.S. Bureau of Labor Statistics (BLS), is the primary source of labor force statistics for the population of the United States. This project uses the October 2022 edition of the Basic Monthly CPS. 
 
 ## Project Objectives  

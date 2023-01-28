@@ -90,7 +90,7 @@ def get_features():
 
 def compute_metrics(model, X_df, y_df):
     """
-    purpose: function executes performs computations to produce evaulation metrics for a given model
+    purpose: function performs computations to produce evaulation metrics for a given model
 
     inputs: 
         model: a model that has been previous fit to spec
