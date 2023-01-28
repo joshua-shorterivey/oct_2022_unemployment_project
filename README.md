@@ -6,7 +6,7 @@
 * Create modules that faciliate project repeatability, as well as final report readability
 
 * Explore features more in depth compared to August iteration of project. 
-    * Look for more crossover beetween features
+    * Look for more crossover between features
 * Construct model to predict `employed` status 
     * Experiment with different model types in order to obtain better predicitive results compared to August
 * Refine work into `final_report` in form of jupyter notebook. 
@@ -28,35 +28,40 @@
 </br>
 
 ## Data Dictionary
-|       Target           | Non_Null Count/Datatype  |     Definition     |
-|:-----------------------|:------------------------:|-------------------:|  
-employed                 | 50556 non-null  object  | employed
+|       Target          | Non_Null Count/Datatype |     Definition     |
+|:----------------------|:-----------------------:|-------------------:|  
+employed                | 50556 non-null  object  | employed
 
-|       Feature          |           Datatype      |     Definition     |
-|:----------------------|:------------------------:|-------------------:|  
-housing_type		    | 50556 non-null  object  |    TYPE OF HOUSING UNIT
-family_income		    | 50556 non-null  object  |	FAMILY INCOME
-household_num		    | 50556 non-null  object  |	TOTAL NUMBER OF PERSONS LIVING 
-household_type		    | 50556 non-null  object  |	HOUSEHOLD TYPE					
-own_bus_or_farm		    | 50556 non-null  object  |	DOES ANYONE IN THIS HOUSEHOLD
-country_region		    | 50556 non-null  object  |	DIVISION
-state		            | 50556 non-null  object  |	FEDERAL INFORMATION
-metropolitan		    | 50556 non-null  object  |	METROPOLITAN STATUS						
-metro_area_size		    | 50556 non-null  object  |	Metropolitan Area (CBSA) SIZE
-age                     | 50556 non-null  object  |	PERSONS AGE
-marital_status		    | 50556 non-null  object  |	MARITAL STATUS 										
-veteran		            | 50556 non-null  object  |	DID YOU EVER SERVE ON ACTIVE DUTY								
-education			    | 50556 non-null  object  |	HIGHEST LEVEL OF SCHOOL 								
+|       Feature         |           Datatype      |     Definition     |
+|:----------------------|:-----------------------:|-------------------:|  
+housing_type		    | 50556 non-null  object  | type of housing unit
+family_income		    | 50556 non-null  object  |	family income
+household_num		    | 50556 non-null  object  |	number of persons in household 
+household_type		    | 50556 non-null  object  |	household type					
+region		            | 50556 non-null  object  |	region of country
+state		            | 50556 non-null  object  |	state
+metropolitan		    | 50556 non-null  object  |	metropolitan status					
+metro_area_size		    | 50556 non-null  object  |	metropolitan area size
+age                     | 50556 non-null  object  |	person's age
+marital_status		    | 50556 non-null  object  |	marital status 										
+is_male     		    | 50556 non-null  object  | gender of respondent 										
+veteran		            | 50556 non-null  object  |	status as veteran of armed forces						
+education			    | 50556 non-null  object  |	highest level of school 								
 race		            | 50556 non-null  object  |	RACE											
 hispanic_or_non		    | 50556 non-null  object  |	HISPANIC OR NON-HISPANIC								
 birth_country		    | 50556 non-null  object  |	COUNTRY OF BIRTH
-mother_birth_country    | 50556 non-null  object  |	COUNTRY OF MOTHER'S BIRTH
-father_birth_country    | 50556 non-null  object  |	COUNTRY OF FATHER'S BIRTH									
-citizenship	            | 50556 non-null  object  |	CITIZENSHIP STATUS									
-upaid_work_last_week	| 50556 non-null  object  |	LAST WEEK, DID YOU DO ANY													
-usual_hours_worked		| 50556 non-null  object  |	DO YOU USUALLY WORK 35 HOURS OR	MORE PER WEEK							
-children_in_household	| 50556 non-null  object  |	PRESENCE OF OWN CHILDREN <18 YEARS	
-professional_certification |51736 non-null float64 |    DOES � HAVE A CURRENTLY
+mother_birth_country    | 50556 non-null  object  |	country of mother's birth
+father_birth_country    | 50556 non-null  object  |	country of father's birth									
+citizenship	            | 50556 non-null  object  |	citizenship status								
+immigration_era	        | 50556 non-null  object  |	era of immigration of any													
+ft_or_pt		        | 50556 non-null  object  |	normal part time or full time status						
+worker_class	        | 50556 non-null  object  |	class of worker
+industry	            | 50556 non-null  object  |	industry of typical employment	
+occupation	            | 50556 non-null  object  |	occupation of typical employement
+enrolled_in_school	    | 50556 non-null  object  |	is the person enrolled in school
+num_children	        | 50556 non-null  object  |	prescence of children in household 
+service_era	            | 50556 non-null  object  |	era of armed forces service
+professional_certification |51736 non-null float64 | hold professional certification
 
 ### Spotlight - Professional Certification
 * **Question:** What is the effect of having a professional certification? 
@@ -93,7 +98,7 @@ professional_certification |51736 non-null float64 |    DOES � HAVE A CURRENTL
 ### Spotlight - Professional Certification
 * **Question:** What is the effect of having a professional certification? 
  
-* **Answer:** Most indivduals do not have certification, but those that do have a 2% unemployment rate vs 4% for those without.
+* **Answer:** Most indivduals do not have a certification, but those that do have a 2% unemployment rate vs 4% for those without.
 
 #### Statistical Hypothesis
 >* ${H_0}$: There is no relationship between having a `professional_certification` and `employment`  
@@ -178,7 +183,7 @@ professional_certification |51736 non-null float64 |    DOES � HAVE A CURRENTL
 * With more time I want to dive into cross examinations of factors to see how they interact, but I'm doubtful that would help more than simply satisfying my curiousity. 
 ---
 # Modeling
-* * Decided to focus on only three types of models for this iteration of project.
+** Decided to focus on only three types of models for this iteration of project.
 * DTC modeling showed promise, but was prone to overfitting when it came time for use on the validation and test subsets
 * Linear SVC and XGBOOST performed worse during the model phase, and they were not moved forward.
 * Further iterations of project will focus much more on exploration and feature reduction in order to reduce noise and dimensionality. 
