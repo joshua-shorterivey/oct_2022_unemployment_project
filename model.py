@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 from itertools import product
-from scipy.stats import chi2_contingency
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import MinMaxScaler
+# from scipy.stats import chi2_contingency
+# from sklearn.model_selection import train_test_split
+# from sklearn.preprocessing import MinMaxScaler
 from sklearn.tree import DecisionTreeClassifier, plot_tree
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
@@ -19,10 +19,9 @@ def create_comp_chart():
 
     returns: a pandas dataframe with appropriately set index
     """
-    statistics = ['Accuracy/Score',
-    'True Positives' , 'False Positives', 'True Negatives', 'False Negatives', \
-    'TPR/Recall', 'False Positive Rate', 'True Negative Rate', 'False Negative Rate', \
-    'Precision', 'F1-Score', 'Support Positive', 'Support Negative']
+    statistics = [
+                'Accuracy/Score','True Positives' , 'False Positives', 'True Negatives', 'False Negatives', 'TPR/Recall', 'False Positive Rate', 'True Negative Rate', 'False Negative Rate',  'Precision', 'F1-Score', 'Support Positive', 'Support Negative'
+                ]
 
 
     return pd.DataFrame({}, index=statistics)
@@ -63,7 +62,9 @@ def get_selectors(parameters):
         parameters: useable list of parameters for modeling
     ---
     '''
-    removal_list = ['Depth: ','K-Neighbors: ','Leaves: ','C: ',' Solver: ', ' Class Weight: ']
+    removal_list = [
+        'Depth: ','K-Neighbors: ','Leaves: ','C: ',' Solver: ', ' Class Weight: '
+        ]
 
     for word in removal_list:
         parameters = parameters.replace(word, "")
@@ -150,7 +151,8 @@ def compute_metrics(model, X_df, y_df):
                         
     return metrics.round(4)
 
-def model_dtc(feat_set,\
+def model_dtc(
+        feat_set,
         model_descriptions,
         comparison_chart,
         subsets):
@@ -315,7 +317,8 @@ def model_knn(feat_set,\
     
     return model_descriptions, comparison_chart
 
-def model_lr(feat_set,\
+def model_lr(
+        feat_set,
         model_descriptions,
         comparison_chart,
         subsets, ):
@@ -430,11 +433,11 @@ def test_dtc(feat_set,\
         model description: model descriptions for models used
         comparison chart: chart that holds metrics on model performance. unused artifact
     """
-    train=subsets[0]
-    X_train=subsets[1]
-    y_train=subsets[2]
-    X_test=subsets[5]
-    y_test=subsets[6]
+    train = subsets[0]
+    X_train = subsets[1]
+    y_train = subsets[2]
+    X_test = subsets[5]
+    y_test = subsets[6]
 
     features = []
     for feature in feat_set:
@@ -483,6 +486,7 @@ def get_test_score(df, subsets):
     'Features Used': 'Baseline Prediction',
     'Parameters': 'n/a'
     }, index=[0])
+    
     feat_set = ['word_count', 'lemmatized', 'language_bigrams']
 
     test_comparisons = create_comp_chart()
